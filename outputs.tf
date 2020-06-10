@@ -10,3 +10,7 @@ output "arn" {
 
 }
 
+output "name" {
+  value       = aws_ecs_cluster.this.name
+  description = "Name of the cluster"
+}
