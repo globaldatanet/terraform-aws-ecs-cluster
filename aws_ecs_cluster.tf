@@ -3,15 +3,20 @@ resource "aws_ecs_cluster" "this" {
   tags               = var.tags
   capacity_providers = var.capacity_providers
 
-  setting {
-    name  = var.setting_name
-    value = var.setting_value
+  dynamic "setting" {
+    for_each = var.setting
+    content {
+      name  = setting.value["name"]
+      value = setting.value["value"]
+    }
   }
 
-  default_capacity_provider_strategy {
-    capacity_provider = var.default_capacity_provider_strategy_name
-    weight            = var.default_capacity_provider_strategy_weight
-    base              = var.default_capacity_provider_strategy_base
+  dynamic "default_capacity_provider_strategy" {
+    for_each = var.default_capacity_provider_strategy
+    content {
+      capacity_provider = default_capacity_provider_strategy.value["capacity_provider"]
+      weight            = default_capacity_provider_strategy.value["weight"]
+      base              = default_capacity_provider_strategy.value["base"]
+    }
   }
-
 }

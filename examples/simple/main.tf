@@ -1,7 +1,5 @@
 provider "aws" {
-  region  = "eu-central-1"
-  profile = "hapag-dev"
-  # Make it faster by skipping the following
+  region                      = "eu-west-1"
   skip_get_ec2_platforms      = true
   skip_metadata_api_check     = true
   skip_region_validation      = true
@@ -10,27 +8,28 @@ provider "aws" {
 }
 
 
-module ecs_cluster {
-  source                                    = "../.."
-  name                                      = "test-mhmd"
-  capacity_providers                        = ["FARGATE"]
-  setting_name                              = "containerInsights"
-  setting_value                             = "enabled"
-  default_capacity_provider_strategy_name   = "FARGATE"
-  default_capacity_provider_strategy_weight = 100
-  default_capacity_provider_strategy_base   = 0
+module "simple" {
+  source = "../.."
+
+  name               = "test-gdn"
+  capacity_providers = ["FARGATE"]
+
+  setting = [{
+    name  = "containerInsights"
+    value = "enabled"
+  }]
 
   tags = {
-    Terraform = "test"
-    owner     = "yahyamo"
+    Terraform = "Yes"
+    owner     = "Mohammed"
   }
 
 }
 
 output "id" {
-  value = module.ecs_cluster.id
+  value = module.simple.id
 }
 
 output "arn" {
-  value = module.ecs_cluster.arn
+  value = module.simple.arn
 }
